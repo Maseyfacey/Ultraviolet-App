@@ -1,9 +1,9 @@
 {
   "version": 2,
   "routes": [
+    { "src": "/uv/(.*)", "dest": "/public/uv/$1" },
     { "src": "/bare/(.*)", "dest": "/src/index.js" },
     { "src": "/uv/(.*)", "dest": "/src/index.js" },
-    { "src": "/uv/(.*)", "dest": "/public/uv/$1" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/public/index.html" }
   ]
