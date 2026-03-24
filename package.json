@@ -1,12 +1,11 @@
 {
-  "name": "ultraviolet-proxy",
+  "name": "uv-proxy",
   "version": "1.0.0",
   "private": true,
   "engines": {
     "node": "24.x"
   },
   "dependencies": {
-    "@tomphttp/bare-server-node": "^2.0.0",
-    "@titaniumnetwork-dev/ultraviolet": "^2.0.0"
+    "@tomphttp/bare-server-node": "2.0.4"
   }
 }
