@@ -7,32 +7,65 @@
     body {
       margin: 0;
       height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      overflow: hidden;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
+      background: #0f172a;
       color: white;
     }
 
-    .container {
-      backdrop-filter: blur(15px);
-      background: rgba(255, 255, 255, 0.05);
-      padding: 40px;
-      border-radius: 16px;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-      width: 350px;
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
     }
 
+    .container {
+      position: relative;
+      z-index: 2;
+      margin: auto;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 350px;
+      padding: 40px;
+      text-align: center;
+
+      backdrop-filter: blur(20px);
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    /* ⚡ Glitch effect */
     h1 {
-      margin-bottom: 10px;
+      position: relative;
       font-size: 26px;
     }
 
-    p {
-      color: #cbd5f5;
-      font-size: 14px;
+    h1::before, h1::after {
+      content: "Web Proxy";
+      position: absolute;
+      left: 0;
+      width: 100%;
+    }
+
+    h1::before {
+      color: #0ff;
+      animation: glitch 2s infinite;
+    }
+
+    h1::after {
+      color: #f0f;
+      animation: glitch 2s infinite reverse;
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+      100% { transform: translate(0); }
     }
 
     input {
@@ -42,7 +75,6 @@
       border-radius: 10px;
       border: none;
       outline: none;
-      font-size: 14px;
     }
 
     button {
@@ -52,81 +84,157 @@
       border-radius: 10px;
       border: none;
       background: #38bdf8;
-      color: black;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.2s;
     }
 
-    button:hover {
-      background: #0ea5e9;
-    }
-
-    /* 🔥 LOADING SCREEN */
-    #loading {
+    /* 🔐 Secure screen */
+    #secure {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: #0f172a;
+      background: #020617;
       display: none;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
       z-index: 9999;
     }
 
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid rgba(255,255,255,0.2);
-      border-top: 5px solid #38bdf8;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 15px;
+    .lock {
+      font-size: 40px;
+      margin-bottom: 20px;
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .status {
+      margin-bottom: 15px;
+      color: #94a3b8;
+    }
+
+    .bar {
+      width: 250px;
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: #38bdf8;
+      transition: width 0.3s;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- 🔥 Loading Overlay -->
-  <div id="loading">
-    <div class="spinner"></div>
-    <p>Loading...</p>
+<canvas id="bg"></canvas>
+
+<!-- 🔐 Secure screen -->
+<div id="secure">
+  <div class="lock">🔐</div>
+  <div class="status" id="status">Initializing secure connection...</div>
+  <div class="bar">
+    <div class="progress" id="progress"></div>
   </div>
+</div>
 
-  <div class="container">
-    <h1>Web Proxy</h1>
-    <p>Browse the web securely</p>
+<div class="container">
+  <h1>Web Proxy</h1>
+  <p>Secure browsing interface</p>
 
-    <input id="url" placeholder="Search or enter URL">
-    <button onclick="go()">Go</button>
-  </div>
+  <input id="url" placeholder="Search or enter URL">
+  <button onclick="go()">Connect</button>
+</div>
 
-  <script>
-    function go() {
-      let input = document.getElementById("url").value;
+<script>
+/* 🌌 PARTICLES */
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
 
-      if (!input.startsWith("http")) {
-        input = "https://www.google.com/search?q=" + encodeURIComponent(input);
-      }
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-      // 🔥 Show loading screen
-      document.getElementById("loading").style.display = "flex";
+let particles = [];
 
-      // slight delay so animation shows
+for (let i = 0; i < 60; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2,
+    dx: Math.random() - 0.5,
+    dy: Math.random() - 0.5
+  });
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particles.forEach(p => {
+    p.x += p.dx;
+    p.y += p.dy;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+/* 🚀 PROXY */
+function go() {
+  let input = document.getElementById("url").value;
+
+  if (!input.startsWith("http")) {
+    input = "https://www.google.com/search?q=" + encodeURIComponent(input);
+  }
+
+  const secure = document.getElementById("secure");
+  const progress = document.getElementById("progress");
+  const status = document.getElementById("status");
+
+  secure.style.display = "flex";
+
+  let steps = [
+    "Initializing secure connection...",
+    "Encrypting request...",
+    "Routing traffic...",
+    "Establishing tunnel...",
+    "Connected"
+  ];
+
+  let percent = 0;
+  let i = 0;
+
+  let interval = setInterval(() => {
+    percent += Math.random() * 20;
+    if (percent > 100) percent = 100;
+
+    progress.style.width = percent + "%";
+
+    if (i < steps.length) {
+      status.innerText = steps[i];
+      i++;
+    }
+
+    if (percent >= 100) {
+      clearInterval(interval);
+
       setTimeout(() => {
         window.location.href = "/math/" + __uv$config.encodeUrl(input);
-      }, 300);
+      }, 400);
     }
-  </script>
+  }, 400);
+}
+</script>
 
 </body>
 </html>
