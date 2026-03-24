@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "src/index.js", "use": "@vercel/node" },
-    { "src": "public/**", "use": "@vercel/static" }
-  ],
   "routes": [
-    { "src": "/uv/(.*)", "dest": "src/index.js" }
-    { "src": "/bare/(.*)", "dest": "src/index.js" },
+    { "src": "/bare/(.*)", "dest": "/src/index.js" },
+    { "src": "/uv/(.*)", "dest": "/src/index.js" },
     { "src": "/uv/(.*)", "dest": "/public/uv/$1" },
     { "src": "/(.*)", "dest": "/public/index.html" }
   ]
