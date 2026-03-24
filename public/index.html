@@ -1,9 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Web Proxy</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+    }
+
+    .container {
+      backdrop-filter: blur(15px);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 40px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      width: 350px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 26px;
+    }
+
+    p {
+      color: #cbd5f5;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #38bdf8;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #0ea5e9;
+    }
+  </style>
+</head>
+
 <body>
   <div class="container">
     <h1>Web Proxy</h1>
-    <p>Enter a URL or search the web</p>
+    <p>Browse the web securely</p>
 
-    <input id="url" placeholder="https://example.com">
+    <input id="url" placeholder="Search or enter URL">
     <button onclick="go()">Go</button>
   </div>
+
+  <script>
+    function go() {
+      let input = document.getElementById("url").value;
+
+      if (!input.startsWith("http")) {
+        input = "https://www.google.com/search?q=" + encodeURIComponent(input);
+      }
+
+      window.location.href = "/math/" + __uv$config.encodeUrl(input);
+    }
+  </script>
 </body>
+</html>
