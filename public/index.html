@@ -84,6 +84,18 @@
 </div>
 
 <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/uv/uv.sw.js', {
+    scope: '/uv/'
+  }).then(() => {
+    console.log('UV service worker registered');
+  }).catch(err => {
+    console.error('SW failed:', err);
+  });
+}
+</script>
+  
+<script>
 function go() {
   let input = document.getElementById("url").value;
 
