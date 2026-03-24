@@ -3,7 +3,6 @@
 <head>
   <title>Web Proxy</title>
 
-  <!-- REQUIRED UV FILES -->
   <script src="/uv/uv.bundle.js"></script>
   <script src="/uv/uv.config.js"></script>
 
@@ -11,34 +10,25 @@
     body {
       margin: 0;
       height: 100vh;
-      font-family: Arial;
       display: flex;
       justify-content: center;
       align-items: center;
       background: #0f172a;
       color: white;
+      font-family: Arial;
     }
 
     .box {
-      background: rgba(255,255,255,0.05);
-      padding: 30px;
-      border-radius: 12px;
       text-align: center;
     }
 
     input {
       padding: 10px;
       width: 250px;
-      border-radius: 8px;
-      border: none;
     }
 
     button {
       padding: 10px;
-      margin-left: 5px;
-      border-radius: 8px;
-      border: none;
-      background: #38bdf8;
       cursor: pointer;
     }
 
@@ -48,24 +38,11 @@
       left:0;
       width:100%;
       height:100%;
-      background:#020617;
+      background:black;
       display:none;
       justify-content:center;
       align-items:center;
       flex-direction:column;
-    }
-
-    .bar {
-      width:200px;
-      height:5px;
-      background:#333;
-      margin-top:10px;
-    }
-
-    .progress {
-      height:100%;
-      width:0%;
-      background:#38bdf8;
     }
   </style>
 </head>
@@ -73,12 +50,11 @@
 <body>
 
 <div id="loading">
-  <div id="status">Connecting...</div>
-  <div class="bar"><div class="progress" id="progress"></div></div>
+  <h2 id="status">Connecting...</h2>
 </div>
 
 <div class="box">
-  <h2>Web Proxy</h2>
+  <h1>Web Proxy</h1>
   <input id="url" placeholder="Enter URL">
   <button onclick="go()">Go</button>
 </div>
@@ -87,15 +63,9 @@
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/uv/uv.sw.js', {
     scope: '/uv/'
-  }).then(() => {
-    console.log('UV service worker registered');
-  }).catch(err => {
-    console.error('SW failed:', err);
   });
 }
-</script>
-  
-<script>
+
 function go() {
   let input = document.getElementById("url").value;
 
@@ -103,37 +73,11 @@ function go() {
     input = "https://www.google.com/search?q=" + encodeURIComponent(input);
   }
 
-  const load = document.getElementById("loading");
-  const prog = document.getElementById("progress");
-  const status = document.getElementById("status");
+  document.getElementById("loading").style.display = "flex";
 
-  load.style.display = "flex";
-
-  let steps = [
-    "Connecting...",
-    "Routing...",
-    "Encrypting...",
-    "Loading..."
-  ];
-
-  let p = 0;
-  let i = 0;
-
-  let int = setInterval(() => {
-    p += uv.random() * 30;
-    if (p > 100) p = 100;
-
-    prog.style.width = p + "%";
-
-    if (i < steps.length) {
-      status.innerText = steps[i++];
-    }
-
-    if (p >= 100) {
-      clearInterval(int);
-      window.location.href = "/uv/" + __uv$config.encodeUrl(input);
-    }
-  }, 400);
+  setTimeout(() => {
+    location.href = "/uv/" + __uv$config.encodeUrl(input);
+  }, 1000);
 }
 </script>
 
