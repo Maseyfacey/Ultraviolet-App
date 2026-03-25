@@ -1,11 +1,17 @@
 {
-  "name": "uv-proxy",
-  "version": "1.0.0",
-  "private": true,
-  "engines": {
-    "node": "24.x"
-  },
-  "dependencies": {
-    "@tomphttp/bare-server-node": "2.0.4"
-  }
+"name": "ultraviolet-vercel-proxy",
+"version": "1.0.0",
+"private": true,
+"type": "module",
+"engines": {
+"node": "24.x"
+},
+"scripts": {
+"dev": "vercel dev",
+"build": "echo "No build step needed"",
+"start": "echo "Vercel handles serverless functions""
+},
+"dependencies": {
+"@tomphttp/bare-server-node": "^2.0.0"
+}
 }
